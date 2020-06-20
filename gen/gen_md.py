@@ -35,3 +35,30 @@ nb = nbformat.read("../nb-src/sample_jnb_1.ipynb", as_version=as_version)
 # MD exporter output
 tpl = "./tpl/md_for_jekyll.tpl"
 (body, resources) = md_exporter.from_notebook_node(nb, template_file=tpl)
+
+# loop through cells to collect text
+lang = nb.metadata.language_info.name
+for i, cell in enumerate(nb.cells):
+    print(f"<!-- Cell {i+1:02d} ({i:02d})\n---------------->")
+    print("<!-- source -->")
+    if cell.cell_type == "markdown":
+        print(cell.source)
+    elif cell.cell_type == "code":
+        print(f"```{lang}\n{cell.source}\n```")
+
+    outputs = cell.get("outputs", [])
+    if outputs:
+        print("<!-- output(s) -->")
+
+    for output in outputs:
+
+        if output.output_type == "stream":
+            print(output.text)
+        else:
+            output_data_keys = output.data.keys()
+            try:
+                print(output.data["text/plain"])
+            except:
+                print(f"`output.data.keys()`: {output_data_keys}")
+
+    print()
