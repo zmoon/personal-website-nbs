@@ -1,0 +1,12 @@
+# environment for working with the nbs
+name: pwnbs
+channels:
+  - conda-forge  # first-priority
+dependencies:
+  - python=3.7
+  - nbconvert
+  - notebook  # Jupyter Notebook
+  - ipywidgets
+  - nb_conda_kernels  # for using conda envs as kernels
+  - jupytext
+  - pygithub  # not in main/defaults
