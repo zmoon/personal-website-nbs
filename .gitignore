@@ -1,6 +1,7 @@
 
 # temporary nb files
 nb-src/*.ipynb
+tmp/
 
 .vscode
 

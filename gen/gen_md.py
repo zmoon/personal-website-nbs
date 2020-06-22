@@ -102,9 +102,27 @@ for i, cell in enumerate(nb.cells):
             print(output.text)
         else:
             output_data_keys = output.data.keys()
+            print(f"  - `output.data.keys()`: {output_data_keys!r}")
             try:
-                print(output.data["text/plain"])  # plaintext repr of the object
-            except:
-                print(f"  - `output.data.keys()`: {output_data_keys!r}")
+                textplain = output.data["text/plain"]  # plaintext repr of the object
+                print("<!-- plaintext repr of displayed output -->")
+                print(textplain)
+            except KeyError:  # no plaintext repr
+                pass
+
+            # save to file
+            if "text/html" in output_data_keys:
+                ext = "html"
+            elif "application/javascript" in output_data_keys:
+                ext = "js"
+            elif not output_data_keys:  # the holoviews plot creates an empty output like this
+                continue
+            else:
+                raise NotImplementedError(f"Not sure what to do with {output_data_keys!r}")
+
+            fp = Path(f"./tmp/output_{i+1:02d}_{j+1:02d}.{ext}")
+
+            with open(fp, "wb") as f:
+                f.write("\n\n".join(output.data[k] for k in output_data_keys).encode("utf-8"))
 
     print()
