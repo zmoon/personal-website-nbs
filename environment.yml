@@ -10,3 +10,4 @@ dependencies:
   - nb_conda_kernels  # for using conda envs as kernels
   - jupytext
   - pygithub  # not in main/defaults
+  - ipython
