@@ -76,6 +76,9 @@ def header_links(nb_path, gistID=None):
     """.strip()
 
 
+# currently testing this with:
+# python gen_md.py > tmp/test.md
+
 # test header_links
 p_nb = Path("../nb-src/sample_jnb_1.ipynb")
 print(header_links(p_nb))
@@ -99,14 +102,14 @@ for i, cell in enumerate(nb.cells):
     ext = ""
     for j, output in enumerate(outputs):
         
-        print(f"* output {j+1} ({j}):\n  - `output_type`: {output.output_type!r}")
+        print(f"* output {j+1} ({j}):\n  - `output_type`: `{output.output_type!r}`")
 
         # need to catch other text types here like traceback and data_text ?
         if output.output_type == "stream":
-            print(output.text)
+            print(f"```\n{output.text.strip()}\n```")
         else:
             output_data_keys = output.data.keys()
-            print(f"  - `output.data.keys()`: {output_data_keys!r}")
+            print(f"  - `output.data.keys()`: `{output_data_keys!r}`")
             try:
                 textplain = output.data["text/plain"]  # plaintext repr of the object
                 print("<!-- plaintext repr of displayed output -->")
@@ -133,7 +136,7 @@ for i, cell in enumerate(nb.cells):
 
             # include or note the paths of output files
             if ext == "html":
-                print(f"{{% include md_nbs/{nb_stem}/{fp.name} %}}")
+                print(f"\n{{% include md_nbs/{nb_stem}/{fp.name} %}}")
             elif ext == "js":
                 # print(f'<script src="assets/js/{nb_stem}/{fp.name}"></script>')
                 js_paths.append(f"assets/js/{nb_stem}/{fp.name}")
