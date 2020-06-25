@@ -11,6 +11,7 @@ from pathlib import Path
 import nbconvert
 import nbformat
 from traitlets.config import Config
+import yaml
 
 
 c = Config()
@@ -139,3 +140,17 @@ for i, cell in enumerate(nb.cells):
 
 
     print()
+
+# YFM
+# can store some things in the YFM of the Jupytext script
+# but need to decide on standards
+yfm = {
+    "scripts": js_paths
+}
+print(f"""
+YFM (will be at top...):
+
+```yaml
+{yaml.dump(yfm)}
+```
+""")
