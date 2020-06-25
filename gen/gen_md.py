@@ -80,6 +80,8 @@ p_nb = Path("../nb-src/sample_jnb_1.ipynb")
 print(header_links(p_nb))
 
 # loop through cells to collect text
+nb_stem = p_nb.stem
+js_paths = []  # collect these to add to YFM (and then include in the layout)
 lang = nb.metadata.language_info.name
 for i, cell in enumerate(nb.cells):
     print(f"<!-- Cell {i+1:02d} ({i:02d})\n---------------->")
@@ -93,6 +95,7 @@ for i, cell in enumerate(nb.cells):
     if outputs:
         print("<!-- output(s) -->")
 
+    ext = ""
     for j, output in enumerate(outputs):
         
         print(f"* output {j+1} ({j}):\n  - `output_type`: {output.output_type!r}")
@@ -106,7 +109,7 @@ for i, cell in enumerate(nb.cells):
             try:
                 textplain = output.data["text/plain"]  # plaintext repr of the object
                 print("<!-- plaintext repr of displayed output -->")
-                print(textplain)
+                print(f"```\n{textplain}\n```")
             except KeyError:  # no plaintext repr
                 pass
 
@@ -123,6 +126,16 @@ for i, cell in enumerate(nb.cells):
             fp = Path(f"./tmp/output_{i+1:02d}_{j+1:02d}.{ext}")
 
             with open(fp, "wb") as f:
-                f.write("\n\n".join(output.data[k] for k in output_data_keys).encode("utf-8"))
+                f.write("\n\n".join(output.data[k] 
+                    for k in output_data_keys if k not in ("text/plain")
+                    ).encode("utf-8"))
+
+            # include or note the paths of output files
+            if ext == "html":
+                print(f"{{% include md_nbs/{nb_stem}/{fp.name} %}}")
+            elif ext == "js":
+                # print(f'<script src="assets/js/{nb_stem}/{fp.name}"></script>')
+                js_paths.append(f"assets/js/{nb_stem}/{fp.name}")
+
 
     print()
