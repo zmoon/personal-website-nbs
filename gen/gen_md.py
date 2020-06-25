@@ -66,10 +66,10 @@ def header_links(nb_path, gistID=None):
     username = "zmoon92"
 
     return f"""
-[![NBViewer](badge_nbviewer)](https://nbviewer.jupyter.org/gist/{username}/{gistID})
+[![NBViewer]({badge_nbviewer})](https://nbviewer.jupyter.org/gist/{username}/{gistID})
 (view rendered on Jupyter nbviewer)
 
-[![Binder](badge_binder)](https://mybinder.org/v2/gist/{username}/{gistID}/)
+[![Binder]({badge_binder})](https://mybinder.org/v2/gist/{username}/{gistID}/)
 (open the notebook directly via MyBinder)
 
 [View source](https://github.com/zmoon92/personal-website-nbs/blob/master/nb-src/{src})
